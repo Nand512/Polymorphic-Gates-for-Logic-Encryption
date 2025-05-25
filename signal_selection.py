@@ -134,10 +134,3 @@ def visualize_graph(G, selected_gates, primary_inputs, primary_outputs):
     nx.draw(G, with_labels=True, node_color=node_colors, node_size=500)
     plt.title("Selected Gates for Hybrid Shielding (Red)")
     plt.show()
-
-# Main workflow
-netlist = "c7552.v"
-G, primary_inputs, primary_outputs = build_graph(netlist)
-selected_gates = select_gates(G, primary_outputs, n=45)
-print("Selected Gates:", selected_gates)
-visualize_graph(G, selected_gates, primary_inputs, primary_outputs)
