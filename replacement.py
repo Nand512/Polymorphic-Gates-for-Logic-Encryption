@@ -33,8 +33,9 @@ def replace(netlist, polymorphic_gate):
         if len(line.split()) > 1:
             line = line.split()
             if line[1] in selected_gates:
-                newline = g.gate(line, j)
-                newfile.append(newline)
+                new = g.mux(g.gate(line, j), j)
+                for n in new:
+                    newfile.append(n)
                 j += 1
             else:
                 newfile.append(" ".join(line))

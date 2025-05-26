@@ -41,7 +41,7 @@ def parse(netlist):
                     gate = gate[:-1].split(",")
                     for i in gate:
                         wires.add(i)
-            if key == 4 and len(line) > 1:
+            if key == 4 and len(line) == 5: # Ensures gates selected have exactly 2 inputs
                 info = []  # [type, name, output, inputs]
                 g = []
                 i = 0
