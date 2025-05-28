@@ -23,11 +23,13 @@ def gate(info, n):
     info = " ".join(info)
     return(info)
 
-def mux(info, n):
+def circuit(info, n):
     info = info.split()
     total_output = info[2][1:-1]
 
     end = []
+    newinputs = []
+    newwires = []
 
     keys = info[5:]
     j = 0
@@ -112,15 +114,21 @@ def mux(info, n):
     not_s2 = "not s2_GSHE%d (not_s2_%d, %s);" % (n, n, keys[2])
     not_s3 = "not s3_GSHE%d (not_s3_%d, %s);" % (n, n, keys[3])
     # 4 ANDs, ANDing s3/s4, outputs from other 4 MUXs, etc.
-    and_0_M4 = "and AND0_M4_GSHE%d (AND0_M3_%d, not_s2_%d, M0_OUT_%d, not_s3_%d);" % (n, n, n, n, n)
-    and_1_M4 = "and AND1_M4_GSHE%d (AND1_M3_%d, not_s2_%d, M1_OUT_%d, %s);" % (n, n, n, n, keys[3])
-    and_2_M4 = "and AND2_M4_GSHE%d (AND2_M3_%d, %s, M2_OUT_%d, not_s3_%d);" % (n, n, keys[2], n, n)
-    and_3_M4 = "and AND3_M4_GSHE%d (AND3_M3_%d, %s, M3_OUT_%d, %s);" % (n, n, keys[2], n, keys[3])
+    and_0_M4 = "and AND0_M4_GSHE%d (AND0_M4_%d, not_s2_%d, M0_OUT_%d, not_s3_%d);" % (n, n, n, n, n)
+    and_1_M4 = "and AND1_M4_GSHE%d (AND1_M4_%d, not_s2_%d, M1_OUT_%d, %s);" % (n, n, n, n, keys[3])
+    and_2_M4 = "and AND2_M4_GSHE%d (AND2_M4_%d, %s, M2_OUT_%d, not_s3_%d);" % (n, n, keys[2], n, n)
+    and_3_M4 = "and AND3_M4_GSHE%d (AND3_M4_%d, %s, M3_OUT_%d, %s);" % (n, n, keys[2], n, keys[3])
     # AND outputs go into OR gate, output is final output
     final_output = "or GSHE%d_OUT (%s, AND0_M4_%d, AND1_M4_%d, AND2_M4_%d, AND3_M4_%d);" % (n, total_output, n, n, n, n)
+
+    newinputs.append(keys)
+    newwires.append("i0_%d,i1_%d,i2_%d,i3_%d,not_s0_%d,not_s1_%d,AND0_M0_%d,AND1_M0_%d,AND2_M0_%d,AND3_M0_%d,M0_OUT_%d,i4_%d,i5_%d,i6_%d,i7_%d,AND0_M1_%d,AND1_M1_%d,AND2_M1_%d,AND3_M1_%d,M1_OUT_%d,i8_%d,i9_%d,i10_%d,i11_%d,AND0_M2_%d,AND1_M2_%d,AND2_M2_%d,AND3_M2_%d,M2_OUT_%d,i12_%d,i13_%d,i14_%d,i15_%d,AND0_M3_%d,AND1_M3_%d,AND2_M3_%d,AND3_M3_%d,M3_OUT_%d,not_s2_%d,not_s3_%d,AND0_M4_%d,AND1_M4_%d,AND2_M4_%d,AND3_M4_%d" % (n, n, n, n, n, n, n, n, n, n, n,\
+                                                                                           n, n, n, n, n, n, n, n, n, n, n,\
+                                                                                            n, n, n, n, n, n, n, n, n, n, n,\
+                                                                                                n, n, n, n, n, n, n, n, n, n, n))
 
     end.extend((i0, i1, i2, i3, not_s0, not_s1, and_0_M0, and_1_M0, and_2_M0, and_3_M0, or_M0, i4, i5, i6, i7,\
                and_0_M1, and_1_M1, and_2_M1, and_3_M1, or_M1, i8, i9, i10, i11, and_0_M2, and_1_M2, and_2_M2, and_3_M2, or_M2,\
                 i12, i13, i14, i15, and_0_M3, and_1_M3, and_2_M3, and_3_M3, or_M3, not_s2, not_s3, and_0_M4, and_1_M4, and_2_M4, and_3_M4, final_output))
 
-    return end
+    return (end, newinputs, newwires)

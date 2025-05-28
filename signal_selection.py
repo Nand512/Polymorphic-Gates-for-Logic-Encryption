@@ -41,6 +41,7 @@ def parse(netlist):
                     gate = gate[:-1].split(",")
                     for i in gate:
                         wires.add(i)
+
             if key == 4 and len(line) == 5: # Ensures gates selected have exactly 2 inputs
                 info = []  # [type, name, output, inputs]
                 g = []
@@ -108,6 +109,7 @@ def estimate_stability(G, node, primary_outputs):
     return stability * (1 / (1 + 0.1 * depth))
 
 def select_gates(G, primary_outputs, n=45):
+    
     weights = compute_weights(G, primary_outputs)
     stabilities = {
         node: estimate_stability(G, node, primary_outputs)
