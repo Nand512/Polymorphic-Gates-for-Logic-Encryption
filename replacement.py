@@ -42,7 +42,7 @@ def make_file(l, newinputs, newwires, output):
 def replace(netlist, polymorphic_gate, output):
     if polymorphic_gate == "GSHE": # imports gshe.py, the python file for GSHE switch (16 boolean functions)
         import GSHE as g
-    elif polymorphic_gate == "5T": # imports dwm.py, the python file for 5-Terminal Magnetic DWM (7 boolean functions)
+    elif polymorphic_gate == "DWM": # imports dwm.py, the python file for 5-Terminal Magnetic DWM (7 boolean functions)
         import dwm as g
     G, primary_inputs, primary_outputs = signal_selection.build_graph(netlist)
     selected_gates = signal_selection.select_gates(G, primary_outputs, n=45)
