@@ -58,29 +58,27 @@ def circuit(info, n):
     not_s2 = "not s2_DWM%d (not_s2_%d, %s);" % (n, n, keys[2])
 
     # This is a big 8x1 MUX, but i5 is unused/FALSE (technically 8 functions?)
-    i0 = "and i0_DWM%d (i0_%d, %s, %s);" % (n, n, a, b) # a AND b
-    i1 = "nand i1_DWM%d (i1_%d, %s, %s);" % (n, n, a, b) # a NAND b
+    i0 = "xnor i0_DWM%d (i0_%d, %s, %s);" % (n, n, a, b) # a XNOR b
+    i1 = "xor i1_DWM%d (i1_%d, %s, %s);" % (n, n, a, b) # a XOR b
     i2 = "or i2_DWM%d (i2_%d, %s, %s);" % (n, n, a, b) # a OR b
     i3 = "nor i3_DWM%d (i3_%d, %s, %s);" % (n, n, a, b) # a NOR b
-    i4 = "buf i4_DWM%d (i4_%d, 1'b0);" % (n, n) # 0 (unused) technically FALSE -- can change to nothing at all in future?
-    i5 = "not i5_DWM%d (i5_%d, %s);" % (n, n, a) # NOT a
-    i6 = "xnor i6_DWM%d (i6_%d, %s, %s);" % (n, n, a, b) # a XNOR b
-    i7 = "xor i7_DWM%d (i7_%d, %s, %s);" % (n, n, a, b) # a XOR b
+    i4 = "buf i4_DWM%d (i4_%d, %s);" % (n, n, a) # NOT a
+    i6 = "and i6_DWM%d (i6_%d, %s, %s);" % (n, n, a, b) # a AND b
+    i7 = "nand i7_DWM%d (i7_%d, %s, %s);" % (n, n, a, b) # a NAND b
     # 8 ANDs
     and_0 = "and AND0_DWM%d (AND0_%d, i0_%d, not_s0_%d, not_s1_%d, not_s2_%d);" % (n, n, n, n, n, n)
     and_1 = "and AND1_DWM%d (AND1_%d, i1_%d, not_s0_%d, not_s1_%d, %s);" % (n, n, n, n, n, keys[2])
     and_2 = "and AND2_DWM%d (AND2_%d, i2_%d, not_s0_%d, %s, not_s2_%d);" % (n, n, n, n, keys[1], n)
     and_3 = "and AND3_DWM%d (AND3_%d, i3_%d, not_s0_%d, %s, %s);" % (n, n, n, n, keys[1], keys[2])
     and_4 = "and AND4_DWM%d (AND4_%d, i4_%d, %s, not_s1_%d, not_s2_%d);" % (n, n, n, keys[0], n, n)
-    and_5 = "and AND5_DWM%d (AND5_%d, i5_%d, %s, not_s1_%d, %s);" % (n, n, n, keys[0], n, keys[2])
     and_6 = "and AND6_DWM%d (AND6_%d, i6_%d, %s, %s, not_s2_%d);" % (n, n, n, keys[0], keys[1], n)
     and_7 = "and AND7_DWM%d (AND7_%d, i7_%d, %s, %s, %s);" % (n, n, n, keys[0], keys[1], keys[2])
     # AND outputs go into OR gate, output is total output
-    final_output = "or OR_DWM%d (%s, AND0_%d, AND1_%d, AND2_%d, AND3_%d, AND4_%d, AND5_%d, AND6_%d, AND7_%d);" % (n, total_output, n, n, n, n, n, n, n, n)
+    final_output = "or OR_DWM%d (%s, AND0_%d, AND1_%d, AND2_%d, AND3_%d, AND4_%d, AND6_%d, AND7_%d);" % (n, total_output, n, n, n, n, n, n, n)
 
     newinputs.append(keys)
-    newwires.append("not_s0_%d,not_s1_%d,not_s2_%d,i0_%d,i1_%d,i2_%d,i3_%d,i4_%d,i5_%d,i6_%d,i7_%d,AND0_%d,AND1_%d,AND2_%d,AND3_%d,AND4_%d,AND5_%d,AND6_%d,AND7_%d" % (n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n))
+    newwires.append("not_s0_%d,not_s1_%d,not_s2_%d,i0_%d,i1_%d,i2_%d,i3_%d,i4_%d,i6_%d,i7_%d,AND0_%d,AND1_%d,AND2_%d,AND3_%d,AND4_%d,AND6_%d,AND7_%d" % (n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n))
 
-    end.extend((not_s0, not_s1, not_s2, i0, i1, i2, i3, i4, i5, i6, i7, and_0, and_1, and_2, and_3, and_4, and_5, and_6, and_7, final_output))
+    end.extend((not_s0, not_s1, not_s2, i0, i1, i2, i3, i4, i6, i7, and_0, and_1, and_2, and_3, and_4, and_6, and_7, final_output))
 
     return (end, newinputs, newwires)
